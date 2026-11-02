@@ -1,34 +1,25 @@
 # 临时文件（草稿、日志、中间态）
 Temp/
 
-# 各片工程不入框架仓库，只保留框架自检片
-projects/*
-!projects/mini-demo/
-
 # 本机 IDE 工作区
 *.code-workspace
 
-# 各项目指向 shared/ 的目录联接（tools/link-shared.cmd 创建）
+# 各项目指向框架 shared/、系列 common/ 的目录联接（tools/link-shared.cmd 创建）
 **/assets/shared
+**/assets/series
 
 # 依赖
 node_modules/
 .venv/
 __pycache__/
 
-# 渲染产物（可由源码重新生成，不入库）
+# 渲染与生成产物（可由源码重建，不入库）；外来素材视频、图片不在此列，走 LFS 入库
 renders/
-media/
-out/
 .debug/
 .hyperframes/
-*.mp4
-*.mov
-*.webm
-*.mkv
-*.gif
-# HyperFrames 转码缓存
 .transcode-cache/
-# 由脚本生成的音轨（build.py / music.py 可重建）
-projects/*/assets/sfx/*.wav
-projects/*/assets/bgm/*.wav
+projects/**/assets/gen/
+projects/**/assets/sfx/*.wav
+projects/**/assets/bgm/*.wav
+# Manim 默认输出目录（应改用 --media_dir Temp/...，这里兜底）
+/media/

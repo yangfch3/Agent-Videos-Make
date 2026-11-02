@@ -85,6 +85,34 @@ def sweep(f0, f1, dur, amp):
     return amp * np.sin(ph) * np.sin(np.pi * tt / dur) ** 2
 
 
+def lufs(x):
+    """BS.1770-4 积分响度；x 为单声道，按复制成双声道计。"""
+    from scipy.signal import lfilter
+    y = lfilter([1.53512485958697, -2.69169618940638, 1.19839281085285], [1, -1.69065929318241, 0.73248077421585], x)
+    y = lfilter([1, -2, 1], [1, -1.99004745483398, 0.99007225036621], y)
+    n, h = int(0.4 * SR), int(0.1 * SR)
+    ms = np.array([np.mean(y[i:i + n] ** 2) for i in range(0, len(y) - n, h)]) * 2
+    ld = -0.691 + 10 * np.log10(ms + 1e-12)
+    rel = -0.691 + 10 * np.log10(ms[ld > -70].mean()) - 10
+    return -0.691 + 10 * np.log10(ms[(ld > -70) & (ld > rel)].mean())
+
+
+def true_peak(x):
+    """4 倍过采样峰值，dBTP。"""
+    from scipy.signal import resample_poly
+    return 20 * np.log10(np.abs(resample_poly(x, 4, 1)).max())
+
+
+def limit(x, thr):
+    """前瞻限峰：5ms 窗内取峰值求增益，起效即时、释放 80ms。"""
+    from scipy.ndimage import maximum_filter1d
+    from scipy.signal import lfilter
+    pk = maximum_filter1d(np.abs(x), int(0.005 * SR), origin=-int(0.0025 * SR))
+    g = np.minimum(1.0, thr / np.maximum(pk, 1e-9))
+    a = np.exp(-1 / (0.08 * SR))
+    return x * np.minimum(g, -lfilter([1 - a], [1, -a], -g))
+
+
 class Track:
     def __init__(self, duration):
         self.buf = np.zeros(int(duration * SR))
@@ -93,8 +121,14 @@ class Track:
         i = int(round((at + 1 / FPS) * SR))  # 声音晚画面 1 帧
         self.buf[i:i + len(sig)] += sig[:max(0, len(self.buf) - i)]
 
-    def write(self, path):
-        buf = self.buf * (0.5 / np.abs(self.buf).max())  # 峰值 -6 dBFS
+    def write(self, path, target=-20.0):
+        """整片唯一的最终混音：归一到 target LUFS，限峰到真峰值 ≤ -1 dBTP（留 0.8 dB 给 AAC 编码过冲）。"""
+        buf = self.buf
+        for _ in range(3):
+            buf = limit(buf * 10 ** ((target - lufs(buf)) / 20), 10 ** (-1.8 / 20))
+        L, tp = lufs(buf), true_peak(buf)
+        assert abs(L - target) < 0.3 and tp <= -1.0, f"响度 {L:.2f} LUFS / 真峰值 {tp:.2f} dBTP 不达标"
+        print(f"mix {L:.2f} LUFS, true peak {tp:.2f} dBTP")
         pcm = (buf * 32767).astype("<i2")
         Path(path).parent.mkdir(parents=True, exist_ok=True)
         with wave.open(str(path), "wb") as w:

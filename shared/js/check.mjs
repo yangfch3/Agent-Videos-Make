@@ -1,7 +1,12 @@
 // 校验脚本骨架（node）：读数据文件、导入纯逻辑模块、按区间汇总冲突、结果写成 UTF-8 文件。
-// 用法：import { loadData, importPure, report } from "./assets/shared/js/check.mjs";
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
-import { dirname } from "node:path";
+// 用法：import { loadData, importPure, report, tempPath } from "./assets/shared/js/check.mjs";
+import { readFileSync, writeFileSync, mkdirSync, realpathSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+// 框架根目录 Temp/ 下的路径；经联接导入时也按真实位置定位，与项目在 projects/ 下的层数无关
+const ROOT = join(dirname(realpathSync(fileURLToPath(import.meta.url))), "../..");
+export const tempPath = (...p) => join(ROOT, "Temp", ...p);
 
 // assets/data/*.js 的形式是 `window.NAME = {...};`
 export function loadData(path) {

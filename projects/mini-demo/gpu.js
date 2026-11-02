@@ -58,7 +58,7 @@ const ready = (async () => {
 async function render(t) {
   const g = await ready;
   g.device.queue.writeBuffer(g.ubo, 0, new Float32Array([t, G.cols, G.rows, G.pitch, G.x0, G.y0, ...G.origin,
-    G.speed, G.wave, G.cell, G.minScale, ...hex(D.col.dim), 1, ...hex(D.col.accent), 1]));
+    G.speed, G.wave, G.cell, G.minScale, ...hex(D.col.dim), 1, ...hex(D.col.subject), 1]));
   const enc = g.device.createCommandEncoder();
   const cp = enc.beginComputePass();
   cp.setPipeline(g.comp); cp.setBindGroup(0, g.cbg); cp.dispatchWorkgroups(Math.ceil(N / 64)); cp.end();

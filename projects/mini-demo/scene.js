@@ -21,7 +21,7 @@ const pivot = new THREE.Group();
 pivot.position.set(...D.obj.pos);
 scene.add(pivot);
 const geo = jitter(new THREE.IcosahedronGeometry(1, 1), D.obj.jitter, mulberry32(D.obj.seed));
-mesh(geo, M(D.col.accent), pivot, [0, 0, 0], false).rotation.x = 0.4;
+mesh(geo, M(D.col.subject), pivot, [0, 0, 0], false).rotation.x = 0.4;
 
 const read = document.getElementById("read");
 

@@ -1,7 +1,7 @@
 // 逐帧（30Hz）校验：数据完整有限；物体投影圆在动作安全框内、不压文字；文字框在标题安全框内；转动每帧位移 ≤ 15px
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadData, importPure, report } from "./assets/shared/js/check.mjs";
+import { loadData, importPure, report, tempPath } from "./assets/shared/js/check.mjs";
 const here = dirname(fileURLToPath(import.meta.url));
 const D = loadData(join(here, "assets/data/demo.js"));
 const T = loadData(join(here, "assets/text/zh-CN.js"));
@@ -49,6 +49,6 @@ for (let f = 0; f <= D.duration * 30; f++) {
   if (v > 15) R.flag("物体边缘每帧位移 > 15px", t);
 }
 R.note(`物体边缘最快 ${vmax.toFixed(2)} px/帧（60fps）`);
-const n = R.write(join(here, "../../Temp/mini-demo/check.txt"));
+const n = R.write(tempPath("mini-demo/check.txt"));
 console.log(n ? `FAIL ${n}` : "OK");
 process.exit(n ? 1 : 0);

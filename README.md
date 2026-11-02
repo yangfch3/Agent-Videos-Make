@@ -6,8 +6,8 @@
 
 ```
 agent_script_video_make/
-├─ docs/        制作 CheckList、创作原则、风格规范、工程约定、技术选型、作品记录
-├─ projects/    每部片一个 HyperFrames 项目，如 projects/<英文名>/（用到再建）
+├─ spec/        框架指导文档：制作 CheckList、创作原则、风格规范、工程约定、技术选型
+├─ projects/    视频项目（入库），各自管理文档与代码；单片一级、系列两级，见工程约定 §1
 ├─ shared/      跨片复用：fonts/ 字体、vendor/ 第三方库、py/ Python 公共模块（文本表与音效、Manim 适配、空间校验、循环音乐）、js/ 校验骨架与 Three.js 低多边形组件
 ├─ tools/       link-shared.cmd（建 assets/shared 联接）、manim.cmd（Manim 启动）
 ├─ .kiro/skills/  与 HyperFrames 同版本的 agent skills
@@ -16,10 +16,21 @@ agent_script_video_make/
 └─ pyproject.toml / uv.lock / .python-version  锁定 Python 与 Manim
 ```
 
-- 不入库：`Temp/`、渲染产物（`renders/`、`media/`、`out/`、全部视频文件）、脚本生成的音轨、`node_modules/`、`.venv/`
+- 不入库：`Temp/`、渲染与生成产物（`renders/`、`assets/gen/`、脚本生成的音轨）、`node_modules/`、`.venv/`
 - 所有临时操作放 `Temp/`，不用系统临时目录
-- Git LFS：字体、非生成的 WAV
+- Git LFS：字体、音视频、位图素材
 - 系列专用的配色、字体、目录约定写在该系列自己的规范里，不改本框架的通用文档
+
+## 文档
+
+做片前先读：
+
+- [工程约定](spec/工程约定.md)：目录、临时文件、工具调用、已验证做法、已知问题、文本与多语言
+- [制作 CheckList](spec/制作CheckList.md)：流程、各阶段关口与打分、画面口述
+- [创作原则](spec/创作原则.md)：讲述、画面、文字、声音，剧情片与科普片各自的经验，手法库
+- [风格规范](spec/风格规范.md)：对比度、字号、线宽、版式、动效、阅读时长、响度的通用数值底线
+- [技术选型](spec/技术选型.md)：各层工具、音效来源、画质与输出规格
+- 做 projects 下某个项目/系列时加读该 project 自己的相关文档
 
 ## 环境基线
 
@@ -57,4 +68,4 @@ agent_script_video_make/
 
 ## 约定、已知问题与升级
 
-见[工程约定](docs/工程约定.md)。
+见[工程约定](spec/工程约定.md)。

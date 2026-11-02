@@ -4,8 +4,19 @@
 *.bat text eol=crlf
 *.sh text eol=lf
 
-# 二进制走 LFS
+# 二进制走 LFS：字体、WAV 全仓库；其余音视频与位图只管 projects/（.kiro/skills 里的上游素材保持原样）
 *.ttf filter=lfs diff=lfs merge=lfs -text
 *.otf filter=lfs diff=lfs merge=lfs -text
 *.woff2 filter=lfs diff=lfs merge=lfs -text
 *.wav filter=lfs diff=lfs merge=lfs -text
+projects/**/*.mp3 filter=lfs diff=lfs merge=lfs -text
+projects/**/*.flac filter=lfs diff=lfs merge=lfs -text
+projects/**/*.mp4 filter=lfs diff=lfs merge=lfs -text
+projects/**/*.mov filter=lfs diff=lfs merge=lfs -text
+projects/**/*.webm filter=lfs diff=lfs merge=lfs -text
+projects/**/*.mkv filter=lfs diff=lfs merge=lfs -text
+projects/**/*.png filter=lfs diff=lfs merge=lfs -text
+projects/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+projects/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+projects/**/*.webp filter=lfs diff=lfs merge=lfs -text
+projects/**/*.gif filter=lfs diff=lfs merge=lfs -text

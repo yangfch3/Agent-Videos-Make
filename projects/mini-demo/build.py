@@ -6,14 +6,14 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).parent
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "shared/py"))
+sys.path.insert(0, str(ROOT / "assets/shared/py"))
 from common import Track, load_text, mallet, read_need, set_duration, thump, write_js  # noqa: E402
 
 T = load_text(ROOT / "assets/text/zh-CN.js")
 rng = np.random.default_rng(7)
 IN, OUT = 0.5, 0.3
 
-COL = {"bg": "#12161C", "ink": "#EEF1F5", "dim": "#9AA6B8", "accent": "#F2B84B"}
+COL = {"bg": "#12161C", "ink": "#EEF1F5", "dim": "#9AA6B8", "subject": "#F2B84B"}  # subject：主体自身的颜色，不是强调色
 
 
 def lum(h):
@@ -27,7 +27,7 @@ def contrast(a, b):
     return (la + 0.05) / (lb + 0.05)
 
 
-for k, need in (("ink", 4.5), ("dim", 4.5), ("accent", 3.0)):
+for k, need in (("ink", 4.5), ("dim", 4.5), ("subject", 3.0)):
     assert contrast(COL[k], COL["bg"]) >= need, (k, contrast(COL[k], COL["bg"]))
 
 # 镜头与物体：物体中心放在屏幕 (620, 520)
