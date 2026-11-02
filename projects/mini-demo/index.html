@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <link rel="stylesheet" href="assets/shared/vendor/katex/katex.min.css" />
+    <script src="assets/shared/vendor/katex/katex.min.js"></script>
+    <script src="assets/shared/vendor/gsap/gsap.min.js"></script>
+    <script src="assets/data/demo.js"></script>
+    <script src="assets/text/zh-CN.js"></script>
+    <script type="importmap">
+      { "imports": { "three": "./assets/shared/vendor/three/three.module.js" } }
+    </script>
+    <style>
+      @font-face {
+        font-family: "Noto Sans SC";
+        src: url("assets/shared/fonts/NotoSansSC-VF.ttf") format("truetype");
+        font-weight: 100 900;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("assets/shared/fonts/JetBrainsMono-VF.ttf") format("truetype");
+        font-weight: 100 800;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #12161c; }
+      #root { width: 100%; height: 100%; font-family: "Noto Sans SC", sans-serif; color: #eef1f5; }
+      #stage { position: absolute; inset: 0; }
+      #gl { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      .txt { position: absolute; white-space: nowrap; line-height: 1.4; opacity: 0; }
+      #title { font-weight: 700; }
+      #formula .katex-display { margin: 0; text-align: left; }
+      #note { font-weight: 500; color: #9aa6b8; }
+      #read { font-family: "JetBrains Mono", monospace; font-weight: 500; }
+      #cap { left: 0; right: 0; width: fit-content; margin: 0 auto; font-weight: 400; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.5" data-width="1920" data-height="1080">
+      <div id="stage" class="clip" data-start="0" data-duration="10.5" data-track-index="0" data-layout-allow-overlap>
+        <canvas id="gl" width="1920" height="1080"></canvas>
+        <div id="title" class="txt"></div>
+        <div id="formula" class="txt"></div>
+        <div id="note" class="txt"></div>
+        <div id="read" class="txt" data-hold></div>
+        <div id="cap" class="txt" data-hold></div>
+      </div>
+      <audio id="sfx" class="clip" data-start="0" data-duration="10.5" data-track-index="1" data-volume="1" src="assets/sfx/demo.wav"></audio>
+    </div>
+    <script>
+      (() => {
+        const D = window.DEMO, T = window.TEXT, B = D.beats, L = D.lay;
+        const place = (id, o) => {
+          const e = document.getElementById(id);
+          if (o.x !== undefined) e.style.left = o.x + "px";
+          e.style.top = o.y + "px";
+          e.style.fontSize = o.size + "px";
+          return e;
+        };
+        place("title", L.title).textContent = T["demo.title"];
+        place("note", L.note).textContent = T["demo.note"];
+        place("cap", L.cap).textContent = T["demo.cap"];
+        place("read", L.read);
+        place("formula", L.formula).innerHTML = katex.renderToString("\\theta = \\omega t", { displayMode: true, output: "html" });
+
+        const tl = gsap.timeline({ paused: true });
+        const enter = (sel, at) => tl.fromTo(sel, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: D.in, ease: "power3.out" }, at);
+        enter("#title", B.title);
+        enter(["#formula", "#note"], B.formula);
+        enter("#read", B.read);
+        enter("#cap", B.cap);
+        tl.to("#cap", { opacity: 0, duration: D.out, ease: "power2.in" }, B.capOut);
+        tl.set({}, {}, D.duration);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+    <script type="module" src="scene.js"></script>
+  </body>
+</html>

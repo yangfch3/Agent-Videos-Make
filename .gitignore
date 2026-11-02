@@ -1,0 +1,34 @@
+# 临时文件（草稿、日志、中间态）
+Temp/
+
+# 各片工程不入框架仓库，只保留框架自检片
+projects/*
+!projects/mini-demo/
+
+# 本机 IDE 工作区
+*.code-workspace
+
+# 各项目指向 shared/ 的目录联接（tools/link-shared.cmd 创建）
+**/assets/shared
+
+# 依赖
+node_modules/
+.venv/
+__pycache__/
+
+# 渲染产物（可由源码重新生成，不入库）
+renders/
+media/
+out/
+.debug/
+.hyperframes/
+*.mp4
+*.mov
+*.webm
+*.mkv
+*.gif
+# HyperFrames 转码缓存
+.transcode-cache/
+# 由脚本生成的音轨（build.py / music.py 可重建）
+projects/*/assets/sfx/*.wav
+projects/*/assets/bgm/*.wav
