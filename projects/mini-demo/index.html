@@ -26,26 +26,29 @@
       html, body { width: 1920px; height: 1080px; overflow: hidden; background: #12161c; }
       #root { width: 100%; height: 100%; font-family: "Noto Sans SC", sans-serif; color: #eef1f5; }
       #stage { position: absolute; inset: 0; }
-      #gl { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #gl, #gpu { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #gpu { opacity: 0; }
       .txt { position: absolute; white-space: nowrap; line-height: 1.4; opacity: 0; }
       #title { font-weight: 700; }
       #formula .katex-display { margin: 0; text-align: left; }
       #note { font-weight: 500; color: #9aa6b8; }
       #read { font-family: "JetBrains Mono", monospace; font-weight: 500; }
-      #cap { left: 0; right: 0; width: fit-content; margin: 0 auto; font-weight: 400; }
+      #cap, #cap2 { left: 0; right: 0; width: fit-content; margin: 0 auto; font-weight: 400; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="10.5" data-width="1920" data-height="1080">
-      <div id="stage" class="clip" data-start="0" data-duration="10.5" data-track-index="0" data-layout-allow-overlap>
+    <div id="root" data-composition-id="main" data-requires-webgpu data-start="0" data-duration="15.4" data-width="1920" data-height="1080">
+      <div id="stage" class="clip" data-start="0" data-duration="15.4" data-track-index="0" data-layout-allow-overlap>
         <canvas id="gl" width="1920" height="1080"></canvas>
+        <canvas id="gpu" width="1920" height="1080"></canvas>
         <div id="title" class="txt"></div>
         <div id="formula" class="txt"></div>
         <div id="note" class="txt"></div>
         <div id="read" class="txt" data-hold></div>
         <div id="cap" class="txt" data-hold></div>
+        <div id="cap2" class="txt" data-hold></div>
       </div>
-      <audio id="sfx" class="clip" data-start="0" data-duration="10.5" data-track-index="1" data-volume="1" src="assets/sfx/demo.wav"></audio>
+      <audio id="sfx" class="clip" data-start="0" data-duration="15.4" data-track-index="1" data-volume="1" src="assets/sfx/demo.wav"></audio>
     </div>
     <script>
       (() => {
@@ -60,6 +63,7 @@
         place("title", L.title).textContent = T["demo.title"];
         place("note", L.note).textContent = T["demo.note"];
         place("cap", L.cap).textContent = T["demo.cap"];
+        place("cap2", L.cap).textContent = T["demo.cap2"];
         place("read", L.read);
         place("formula", L.formula).innerHTML = katex.renderToString("\\theta = \\omega t", { displayMode: true, output: "html" });
 
@@ -70,11 +74,16 @@
         enter("#read", B.read);
         enter("#cap", B.cap);
         tl.to("#cap", { opacity: 0, duration: D.out, ease: "power2.in" }, B.capOut);
+        tl.to(["#gl", "#title", "#formula", "#note", "#read"], { opacity: 0, duration: D.out, ease: "power2.in" }, B.fadeAll);
+        tl.fromTo("#gpu", { opacity: 0 }, { opacity: 1, duration: D.in, ease: "power3.out" }, B.gpu);
+        enter("#cap2", B.cap2);
+        tl.to("#cap2", { opacity: 0, duration: D.out, ease: "power2.in" }, B.cap2Out);
         tl.set({}, {}, D.duration);
         window.__timelines = window.__timelines || {};
         window.__timelines["main"] = tl;
       })();
     </script>
     <script type="module" src="scene.js"></script>
+    <script type="module" src="gpu.js"></script>
   </body>
 </html>

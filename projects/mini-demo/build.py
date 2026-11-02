@@ -42,15 +42,26 @@ lay = {"title": {"x": 200, "y": 120, "size": 72}, "formula": {"x": 1100, "y": 30
        "note": {"x": 1100, "y": 420, "size": 36}, "read": {"x": 1100, "y": 540, "size": 48, "lines": 3},
        "cap": {"y": 860, "size": 44}}
 
+# WebGPU 波纹网格：compute 算每格强度，render 实例化画方块；波纹从物体中心扩散
+grid = {"cols": 30, "rows": 12, "pitch": 54, "cell": 40, "minScale": 0.3, "x0": 150, "y0": 150,
+        "origin": [cx, cy], "speed": 360.0, "wave": 300.0}
+assert grid["x0"] + grid["cols"] * grid["pitch"] <= 1824 and grid["y0"] + grid["rows"] * grid["pitch"] <= lay["cap"]["y"]
+assert grid["cell"] * grid["minScale"] >= 12
+assert grid["speed"] / 60 <= 15
+
 # 节拍（秒）
 b = {"title": 0.3, "formula": 1.3, "read": 1.8, "pop": 3.6, "cap": 4.0}
 b["capOut"] = b["cap"] + IN + read_need(T["demo.cap"])
-duration = math.ceil((b["capOut"] + OUT + 0.4) * 10) / 10
-assert 9 <= duration <= 12, duration
-assert duration - b["formula"] - IN >= read_need(T["demo.note"])
+b["fadeAll"] = b["capOut"] + OUT           # 第一段全部退场
+b["gpu"] = b["fadeAll"] + OUT              # WebGPU 网格入场，波纹从此刻起算
+b["cap2"] = b["gpu"] + 0.3
+b["cap2Out"] = b["cap2"] + IN + read_need(T["demo.cap2"])
+duration = math.ceil((b["cap2Out"] + OUT + 0.4) * 10) / 10
+assert 14 <= duration <= 17, duration
+assert b["fadeAll"] - b["formula"] - IN >= read_need(T["demo.note"])
 
 data = {"duration": duration, "beats": {k: round(v, 4) for k, v in b.items()}, "in": IN, "out": OUT,
-        "col": COL, "cam": cam, "obj": obj, "lay": lay}
+        "col": COL, "cam": cam, "obj": obj, "lay": lay, "grid": grid}
 write_js(ROOT / "assets/data/demo.js", "DEMO", data)
 set_duration(ROOT / "index.html", duration)
 
@@ -62,5 +73,8 @@ tr.place(b["read"], mallet(783.99, 0.3, 0.2, rng))
 tr.place(b["pop"], thump(0.35, 80))
 tr.place(b["pop"], mallet(392.0, 0.35, 0.3, rng))
 tr.place(b["cap"], mallet(523.25, 0.25, 0.4, rng))
+tr.place(b["gpu"], thump(0.3, 70))
+tr.place(b["gpu"], mallet(261.63, 0.35, 0.5, rng))
+tr.place(b["cap2"], mallet(523.25, 0.25, 0.4, rng))
 tr.write(ROOT / "assets/sfx/demo.wav")
 print("duration", duration, {k: round(v, 2) for k, v in b.items()})
