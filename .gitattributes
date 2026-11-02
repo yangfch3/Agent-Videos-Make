@@ -1,3 +1,10 @@
+# 换行：仓库内统一 LF，检出按本机习惯；批处理固定 CRLF，shell 脚本固定 LF
+* text=auto
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.sh text eol=lf
+
+# 二进制走 LFS
 *.ttf filter=lfs diff=lfs merge=lfs -text
 *.otf filter=lfs diff=lfs merge=lfs -text
 *.woff2 filter=lfs diff=lfs merge=lfs -text
