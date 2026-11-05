@@ -1,5 +1,6 @@
 import * as THREE from "three";
-import { M, jitter, mesh, mulberry32 } from "./assets/shared/js/lowpoly.js";
+import { mesh, mulberry32 } from "./assets/shared/js/three-util.js";
+import { M, jitter } from "./lowpoly.js";
 import { angleAt, popAt } from "./world.js";
 
 const D = window.DEMO, W = 1920, H = 1080;

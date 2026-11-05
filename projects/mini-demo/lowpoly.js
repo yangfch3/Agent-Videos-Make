@@ -1,20 +1,7 @@
-// 低多边形基础件：确定性随机、平涂材质、建网格、顶点抖动
+// 本片的低多边形质感：平涂材质、顶点抖动
 import * as THREE from "three";
 
-export const mulberry32 = (a) => () => {
-  a |= 0; a = (a + 0x6d2b79f5) | 0;
-  let t = Math.imul(a ^ (a >>> 15), 1 | a);
-  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-};
 export const M = (color, o = {}) => new THREE.MeshStandardMaterial({ color, flatShading: true, roughness: 0.95, metalness: 0, ...o });
-export const mesh = (geo, mat, parent, pos = [0, 0, 0], shadow = true) => {
-  const m = new THREE.Mesh(geo, mat);
-  m.position.set(...pos);
-  m.castShadow = shadow; m.receiveShadow = true;
-  parent.add(m);
-  return m;
-};
 export const jitter = (geo, amt, rnd, keep = () => false) => {  // keep(x, y, z) 为真的顶点不动
   const p = geo.attributes.position, seen = new Map();
   for (let i = 0; i < p.count; i++) {

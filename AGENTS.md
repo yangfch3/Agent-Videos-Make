@@ -43,5 +43,5 @@
 ## 视频制作框架
 
 - 做片前先读 [README](README.md)，再读其「文档」一节列出的全部规范，缺一不可
-- HyperFrames skills 与 spec 冲突时，按工程约定 §2「skills 与 spec 的分工」处理
-- `spec/`、README、AGENTS 是框架指导文档，不得自行修改；发现有错、有缺或矛盾时，向用户提少量建议并询问，同意后再改（见制作 CheckList §1）
+- HyperFrames skills 与 spec 冲突时：skills 的合成契约必须遵守，流程、创作、数值以 spec 为准
+- `spec/`、README、AGENTS 是框架指导文档，不得自行修改；发现有错、有缺或矛盾时，向用户提少量建议并询问，同意后再改
