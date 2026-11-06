@@ -42,7 +42,7 @@ agent_script_video_make/
 | 系统 | Windows 11 x64 | 记录 |
 | GPU | 桌面独显，D3D12 下可创建 WebGPU 硬件 device（非回退 adapter）；参考档位 NVIDIA Ada（RTX 40 系），驱动 621.01 | 记录 |
 | Node.js | 22.x | 记录 |
-| HyperFrames | 0.8.231；agent skills 取同版本 tag | `package-lock.json`、`.kiro/skills/` |
+| HyperFrames | 0.9.19；agent skills 取同版本 tag | `package-lock.json`、`.kiro/skills/` |
 | GSAP | 3.14.2，本地文件，不走 CDN | `package-lock.json`、`shared/vendor/gsap/` |
 | KaTeX / Three.js | 0.19.1 / 0.186.1，本地文件 | `package-lock.json`、`shared/vendor/katex/`、`shared/vendor/three/` |
 | 渲染浏览器 | chrome-headless-shell 152.0.7977.30（版本写死在 HyperFrames 内，系统 Chrome 不参与出片） | `npx hyperframes browser ensure` |
